@@ -9,15 +9,38 @@ namespace CSharpFundumentals.Others
 
         public static void Run()
         {
-            Console.WriteLine("Running predicate:");
-            var list = new int[] { 12,4,67,8,99 };
-
+            var list = new int[] { 12, 4, 6, 1, 99 };
+            Console.WriteLine($"Soure array: {string.Join(", ", list)}");
+            // func may be defined clearly
+            //Func<int, string, string> f = AddSuffix;
+            var withSuffix = list.Stringify(AddSuffix, "kg");
+            Console.WriteLine($"With Suffix array: {withSuffix}");
+            var addPrefix = list.Stringify(AddPrefix, "i");
+            Console.WriteLine($"With Prefix array: {addPrefix}");
+            Console.ReadLine();
         }
 
 
-        private static Predicate<int> Less10(int num)
+        private static string Stringify(this int[] source, Func<int, string, string> fun, string funParam)
         {
-            return num < 10;
+            var result = new StringBuilder();
+            foreach (var item in source)
+            {
+                result.Append(fun(item, funParam));
+                result.Append(", ");
+            }
+            result.Remove(result.Length - 2, 2);
+            return result.ToString();
+        }
+
+        private static string AddSuffix(int num, string suffix)
+        {
+            return string.Concat(num.ToString(), suffix);
+        }
+
+        private static string AddPrefix(int num, string prefix)
+        {
+            return string.Concat(prefix, num.ToString());
         }
     }
 }
